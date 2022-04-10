@@ -8,25 +8,59 @@ public class Main {
         System.out.println("Math Command Line Game");
 
         int min = 1;
-        int max = 200;
+        int max = 10;
 
-        Scanner answerScanner = new Scanner(System.in); // Create a Scanner object
+        Scanner inputScanner = new Scanner(System.in);
 
-        int x = generateRandomValue(min, max);
-        int y = generateRandomValue(min, max);
+        System.out.println("How many turns would you like to play?");
+        int turnCount = inputScanner.nextInt();
 
-        System.out.println("What is " + x + " + " + y + " ?");
-        int answer = answerScanner.nextInt(); // Read user input
-        answerScanner.close();
-        System.out.println("You said " + answer);
-        System.out.println(answer == addTwoNumbers(x, y) ? "You are correct!" : "Incorrect!");
+        for (int i = 0; i <= turnCount - 1; i++) {
+
+            int x = generateRandomValue(min, max);
+            int y = generateRandomValue(min, max);
+            int additionAnswer = addTwoNumbers(x, y);
+
+            String questionType = chooseQuestionType();
+
+            if (questionType == "add") {
+                System.out.println("What is " + x + " + " + y + " ?");
+                int answer = inputScanner.nextInt();
+                printAnswerCheck(answer == additionAnswer);
+            }
+            if (questionType == "subtract") {
+                System.out.println("What is " + additionAnswer + " - " + x + " ?");
+                int answer = inputScanner.nextInt();
+                printAnswerCheck(answer == y);
+            }
+
+        }
+        inputScanner.close();
+
     }
 
-    public static int generateRandomValue(int min, int max) {
+    private static String chooseQuestionType() {
+        int randomValue = generateRandomValue(0, 1);
+        if (randomValue == 0) {
+            return "add";
+        }
+        if (randomValue == 1) {
+            return "subtract";
+        }
+        return null;
+    }
+
+    private static void printAnswerCheck(boolean checker) {
+        String isCorrectMessage = "You are correct!";
+        String isIncorrectMessage = "You are incorrect!";
+        System.out.println(checker ? isCorrectMessage : isIncorrectMessage);
+    }
+
+    private static int generateRandomValue(int min, int max) {
         return (int) Math.floor(Math.random() * (max - min + 1) + min);
     }
 
-    public static int addTwoNumbers(int x, int y) {
+    private static int addTwoNumbers(int x, int y) {
         return x + y;
     }
 
